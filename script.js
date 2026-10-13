@@ -1,94 +1,74 @@
-// ROSHAN GLOBAL TECH
-// Developed by BK ROSHAN
-// JavaScript Interactive Features
-
 "use strict";
 
-// ==================================
-// 1. MOBILE NAVIGATION
-// ==================================
+/* ROSHAN GLOBAL TECH */
+/* Interactive Website Features */
+
+// MOBILE MENU
 
 const menuToggle = document.getElementById("menuToggle");
 const navigation = document.getElementById("navigation");
 
-if (menuToggle && navigation) {
+menuToggle.addEventListener("click", () => {
 
-    menuToggle.addEventListener("click", function () {
+    const open = navigation.classList.toggle("active");
 
-        const isOpen = navigation.classList.toggle("active");
+    menuToggle.textContent = open ? "✕" : "☰";
 
-        menuToggle.setAttribute(
-            "aria-expanded",
-            String(isOpen)
-        );
+    menuToggle.setAttribute("aria-expanded", String(open));
 
-        menuToggle.textContent = isOpen ? "✕" : "☰";
+});
 
-    });
+document.querySelectorAll("#navigation a").forEach(link => {
 
-    document.querySelectorAll("#navigation a").forEach(function (link) {
+    link.addEventListener("click", () => {
 
-        link.addEventListener("click", function () {
+        navigation.classList.remove("active");
 
-            navigation.classList.remove("active");
+        menuToggle.textContent = "☰";
 
-            menuToggle.setAttribute("aria-expanded", "false");
-
-            menuToggle.textContent = "☰";
-
-        });
+        menuToggle.setAttribute("aria-expanded", "false");
 
     });
 
-}
+});
 
 
-// ==================================
-// 2. DARK / LIGHT MODE
-// ==================================
+// THEME
 
 const themeToggle = document.getElementById("themeToggle");
 
-const savedTheme = localStorage.getItem("rgt-theme");
-
-if (savedTheme === "light") {
+if (localStorage.getItem("rgt-theme") === "light") {
     document.body.classList.add("light-mode");
 }
 
-function updateThemeButton() {
+function updateTheme() {
 
-    if (!themeToggle) return;
-
-    const isLight = document.body.classList.contains("light-mode");
-
-    themeToggle.textContent = isLight ? "🌙" : "☀️";
-
-}
-
-updateThemeButton();
-
-if (themeToggle) {
-
-    themeToggle.addEventListener("click", function () {
-
-        document.body.classList.toggle("light-mode");
-
-        const theme = document.body.classList.contains("light-mode")
-            ? "light"
-            : "dark";
-
-        localStorage.setItem("rgt-theme", theme);
-
-        updateThemeButton();
-
-    });
+    themeToggle.textContent =
+        document.body.classList.contains("light-mode")
+        ? "🌙"
+        : "☀️";
 
 }
 
+updateTheme();
 
-// ==================================
-// 3. LANGUAGE SWITCHER
-// ==================================
+themeToggle.addEventListener("click", () => {
+
+    document.body.classList.toggle("light-mode");
+
+    localStorage.setItem(
+        "rgt-theme",
+        document.body.classList.contains("light-mode")
+        ? "light"
+        : "dark"
+    );
+
+    updateTheme();
+
+});
+
+
+// LANGUAGE
 
 const translations = {
 
@@ -156,13 +136,13 @@ const translations = {
 
 const languageSelect = document.getElementById("languageSelect");
 
-function changeLanguage(language) {
+function changeLanguage(lang) {
 
-    const selected = translations[language] || translations.en;
+    const selected = translations[lang] || translations.en;
 
-    document.documentElement.lang = language;
+    document.documentElement.lang = lang;
 
-    document.querySelectorAll("[data-i18n]").forEach(function (element) {
+    document.querySelectorAll("[data-i18n]").forEach(element => {
 
         const key = element.dataset.i18n;
 
@@ -172,33 +152,25 @@ function changeLanguage(language) {
 
     });
 
-    localStorage.setItem("rgt-language", language);
+    localStorage.setItem("rgt-language", lang);
 
 }
 
-if (languageSelect) {
+languageSelect.value =
+    localStorage.getItem("rgt-language") || "en";
 
-    const savedLanguage =
-        localStorage.getItem("rgt-language") || "en";
-
-    languageSelect.value = translations[savedLanguage]
-        ? savedLanguage
-        : "en";
-
-    changeLanguage(languageSelect.value);
-
-    languageSelect.addEventListener("change", function () {
-
-        changeLanguage(this.value);
-
-    });
-
+if (!translations[languageSelect.value]) {
+    languageSelect.value = "en";
 }
 
+changeLanguage(languageSelect.value);
 
-// ==================================
-// 4. JAPANESE JLPT QUIZ
-// ==================================
+languageSelect.addEventListener("change", event => {
+    changeLanguage(event.target.value);
+});
+
+
+// JLPT QUIZ
 
 const questions = [
 
@@ -207,55 +179,46 @@ const questions = [
         options: ["みず", "ひ", "やま", "かわ"],
         answer: 0
     },
-
     {
         question: "「学校」の読み方は何ですか？",
         options: ["せんせい", "がっこう", "かいしゃ", "でんしゃ"],
         answer: 1
     },
-
     {
         question: "「食べる」の意味は何ですか？",
         options: ["To sleep", "To drink", "To eat", "To go"],
         answer: 2
     },
-
     {
         question: "「明日」の読み方は何ですか？",
         options: ["きのう", "きょう", "あした", "まいにち"],
         answer: 2
     },
-
     {
         question: "「電車」の意味は何ですか？",
         options: ["Train", "Car", "Bus", "Airplane"],
         answer: 0
     },
-
     {
         question: "「勉強」の読み方は何ですか？",
         options: ["べんきょう", "しごと", "りょこう", "せいかつ"],
         answer: 0
     },
-
     {
         question: "「会社」の意味は何ですか？",
         options: ["Hospital", "School", "Company", "Station"],
         answer: 2
     },
-
     {
         question: "「約束」の読み方は何ですか？",
         options: ["やくそく", "やくしょ", "やさい", "やすみ"],
         answer: 0
     },
-
     {
         question: "「経験」の読み方は何ですか？",
         options: ["けいかく", "けいけん", "けいざい", "けんこう"],
         answer: 1
     },
-
     {
         question: "「努力」の意味は何ですか？",
         options: ["Holiday", "Effort", "Money", "Weather"],
@@ -267,6 +230,7 @@ const questions = [
 let currentQuestion = 0;
 let score = 0;
 let answered = false;
+let quizFinished = false;
 
 const questionNumber = document.getElementById("questionNumber");
 const quizScore = document.getElementById("quizScore");
@@ -288,7 +252,7 @@ function showQuestion() {
     quizScore.textContent = `Score: ${score}`;
 
     quizProgress.style.width =
-        `${(currentQuestion / questions.length) * 100}%`;
+        `${currentQuestion / questions.length * 100}%`;
 
     quizQuestion.textContent = current.question;
 
@@ -300,7 +264,7 @@ function showQuestion() {
 
     nextQuestion.textContent = "Next Question →";
 
-    current.options.forEach(function (option, index) {
+    current.options.forEach((option, index) => {
 
         const button = document.createElement("button");
 
@@ -308,9 +272,50 @@ function showQuestion() {
 
         button.textContent = option;
 
-        button.addEventListener("click", function () {
+        button.addEventListener("click", () => {
 
-            checkAnswer(index);
+            if (answered) return;
+
+            answered = true;
+
+            const correct = current.answer;
+
+            if (index === correct) {
+                score++;
+            }
+
+            quizOptions.querySelectorAll("button").forEach((btn, i) => {
+
+                btn.disabled = true;
+
+                if (i === correct) {
+                    btn.classList.add("correct");
+                }
+
+                if (i === index && i !== correct) {
+                    btn.classList.add("wrong");
+                }
+
+            });
+
+            quizScore.textContent = `Score: ${score}`;
+
+            quizFeedback.textContent =
+                index === correct
+                ? "✓ Correct! Well done."
+                : "✗ Incorrect. Keep practicing.";
+
+            quizFeedback.style.color =
+                index === correct ? "#22c55e" : "#ef4444";
+
+            quizProgress.style.width =
+                `${(currentQuestion + 1) / questions.length * 100}%`;
+
+            nextQuestion.disabled = false;
+
+            if (currentQuestion === questions.length - 1) {
+                nextQuestion.textContent = "View Results →";
+            }
 
         });
 
@@ -320,164 +325,94 @@ function showQuestion() {
 
 }
 
-function checkAnswer(selectedIndex) {
+nextQuestion.addEventListener("click", () => {
 
-    if (answered) return;
+    if (quizFinished) {
 
-    answered = true;
-
-    const correctIndex = questions[currentQuestion].answer;
-
-    const buttons = quizOptions.querySelectorAll("button");
-
-    buttons.forEach(function (button, index) {
-
-        button.disabled = true;
-
-        if (index === correctIndex) {
-            button.classList.add("correct");
-        }
-
-        if (index === selectedIndex && index !== correctIndex) {
-            button.classList.add("wrong");
-        }
-
-    });
-
-    if (selectedIndex === correctIndex) {
-
-        score++;
-
-        quizFeedback.textContent = "✓ Correct! Well done.";
-
-        quizFeedback.style.color = "#22c55e";
-
-    } else {
-
-        quizFeedback.textContent = "✗ Incorrect. Try the next question.";
-
-        quizFeedback.style.color = "#ef4444";
-
-    }
-
-    quizScore.textContent = `Score: ${score}`;
-
-    quizProgress.style.width =
-        `${((currentQuestion + 1) / questions.length) * 100}%`;
-
-    nextQuestion.disabled = false;
-
-    if (currentQuestion === questions.length - 1) {
-        nextQuestion.textContent = "View Results →";
-    }
-
-}
-
-if (
-    questionNumber &&
-    quizScore &&
-    quizProgress &&
-    quizQuestion &&
-    quizOptions &&
-    quizFeedback &&
-    nextQuestion
-) {
-
-    nextQuestion.addEventListener("click", function () {
-
-        if (currentQuestion >= questions.length) {
-
-            currentQuestion = 0;
-            score = 0;
-
-            showQuestion();
-            return;
-
-        }
-
-        currentQuestion++;
-
-        if (currentQuestion >= questions.length) {
-
-            quizQuestion.textContent =
-                `Quiz Complete! Your Score: ${score}/${questions.length}`;
-
-            quizOptions.innerHTML = "";
-
-            quizFeedback.textContent =
-                score >= 7
-                    ? "Excellent work! Keep learning."
-                    : "Good effort! Practice again to improve.";
-
-            nextQuestion.textContent = "Restart Quiz";
-
-            nextQuestion.disabled = false;
-
-            return;
-
-        }
+        currentQuestion = 0;
+        score = 0;
+        quizFinished = false;
 
         showQuestion();
+        return;
 
-    });
+    }
+
+    if (!answered) return;
+
+    currentQuestion++;
+
+    if (currentQuestion >= questions.length) {
+
+        quizFinished = true;
+
+        questionNumber.textContent = "Completed";
+
+        quizQuestion.textContent =
+            `Quiz Complete! Your Score: ${score}/${questions.length}`;
+
+        quizOptions.innerHTML = "";
+
+        quizFeedback.textContent =
+            score >= 7
+            ? "Excellent work! Keep learning."
+            : "Good effort! Practice again.";
+
+        nextQuestion.textContent = "Restart Quiz";
+
+        nextQuestion.disabled = false;
+
+        return;
+
+    }
 
     showQuestion();
 
-}
+});
+
+showQuestion();
 
 
-// ==================================
-// 5. SALARY CALCULATOR
-// ==================================
+// SALARY CALCULATOR
 
-const calculateSalary = document.getElementById("calculateSalary");
+document.getElementById("calculateSalary")
+.addEventListener("click", () => {
 
-if (calculateSalary) {
+    const wageInput = document.getElementById("hourlyWage");
+    const hoursInput = document.getElementById("workingHours");
+    const result = document.getElementById("salaryResult");
 
-    calculateSalary.addEventListener("click", function () {
+    const wage = Number(wageInput.value);
+    const hours = Number(hoursInput.value);
 
-        const wageInput = document.getElementById("hourlyWage");
-        const hoursInput = document.getElementById("workingHours");
-        const result = document.getElementById("salaryResult");
+    if (
+        wageInput.value.trim() === "" ||
+        hoursInput.value.trim() === "" ||
+        !Number.isFinite(wage) ||
+        !Number.isFinite(hours) ||
+        wage < 0 ||
+        hours < 0
+    ) {
 
-        const wage = Number(wageInput.value);
-        const hours = Number(hoursInput.value);
+        result.textContent = "Please enter valid numbers.";
+        return;
 
-        if (
-            wageInput.value.trim() === "" ||
-            hoursInput.value.trim() === "" ||
-            !Number.isFinite(wage) ||
-            !Number.isFinite(hours) ||
-            wage < 0 ||
-            hours < 0
-        ) {
+    }
 
-            result.textContent =
-                "Please enter valid wage and working hours.";
+    const salary = wage * hours;
 
-            return;
-
-        }
-
-        const salary = wage * hours;
-
-        const formatted = new Intl.NumberFormat("ja-JP", {
+    result.textContent =
+        "Estimated Gross Salary: " +
+        new Intl.NumberFormat("ja-JP", {
             style: "currency",
             currency: "JPY",
             maximumFractionDigits: 0
         }).format(salary);
 
-        result.textContent =
-            `Estimated Gross Salary: ${formatted}`;
-
-    });
-
-}
+});
 
 
-// ==================================
-// 6. TYPING SPEED PRACTICE
-// ==================================
+// TYPING PRACTICE
 
 const typingTarget = document.getElementById("typingTarget");
 const typingInput = document.getElementById("typingInput");
@@ -486,131 +421,112 @@ const typingAccuracy = document.getElementById("typingAccuracy");
 const typingWpm = document.getElementById("typingWpm");
 const resetTyping = document.getElementById("resetTyping");
 
-if (
-    typingTarget &&
-    typingInput &&
-    typingTime &&
-    typingAccuracy &&
-    typingWpm &&
-    resetTyping
-) {
+const targetText = typingTarget.textContent.trim();
 
-    const targetText = typingTarget.textContent.trim();
+let typingStart = null;
+let typingTimer = null;
 
-    let typingStart = null;
-    let typingTimer = null;
+function updateTypingStats() {
 
-    function updateTypingStats() {
+    if (!typingStart) return;
 
-        if (!typingStart) return;
+    const typed = typingInput.value;
 
-        const typed = typingInput.value;
+    const elapsed = Math.max(
+        (Date.now() - typingStart) / 1000,
+        0.001
+    );
 
-        const elapsed = Math.max(
-            (Date.now() - typingStart) / 1000,
-            0.001
-        );
+    let correct = 0;
 
-        let correctCharacters = 0;
+    for (let i = 0; i < typed.length; i++) {
 
-        for (let i = 0; i < typed.length; i++) {
-
-            if (typed[i] === targetText[i]) {
-                correctCharacters++;
-            }
-
+        if (typed[i] === targetText[i]) {
+            correct++;
         }
-
-        const accuracy = typed.length === 0
-            ? 100
-            : Math.round(
-                (correctCharacters / typed.length) * 100
-            );
-
-        const wpm = Math.round(
-            (correctCharacters / 5) / (elapsed / 60)
-        );
-
-        typingTime.textContent =
-            `Time: ${Math.floor(elapsed)}s`;
-
-        typingAccuracy.textContent =
-            `Accuracy: ${accuracy}%`;
-
-        typingWpm.textContent =
-            `WPM: ${wpm}`;
 
     }
 
-    typingInput.addEventListener("input", function () {
+    const accuracy = typed.length
+        ? Math.round(correct / typed.length * 100)
+        : 100;
 
-        if (!typingStart && typingInput.value.length > 0) {
+    const wpm = Math.round(
+        (correct / 5) / (elapsed / 60)
+    );
 
-            typingStart = Date.now();
+    typingTime.textContent =
+        `Time: ${Math.floor(elapsed)}s`;
 
-            typingTimer = setInterval(
-                updateTypingStats,
-                1000
-            );
+    typingAccuracy.textContent =
+        `Accuracy: ${accuracy}%`;
 
-        }
+    typingWpm.textContent =
+        `WPM: ${wpm}`;
 
-        updateTypingStats();
+}
 
-        if (typingInput.value === targetText) {
+typingInput.addEventListener("input", () => {
 
-            clearInterval(typingTimer);
+    if (!typingStart && typingInput.value.length > 0) {
 
-            typingTimer = null;
+        typingStart = Date.now();
 
-            typingInput.disabled = true;
+        typingTimer = setInterval(updateTypingStats, 1000);
 
-            updateTypingStats();
+    }
 
-        }
+    updateTypingStats();
 
-    });
-
-    resetTyping.addEventListener("click", function () {
+    if (typingInput.value === targetText) {
 
         clearInterval(typingTimer);
 
         typingTimer = null;
-        typingStart = null;
 
-        typingInput.value = "";
-        typingInput.disabled = false;
+        typingInput.disabled = true;
 
-        typingTime.textContent = "Time: 0s";
-        typingAccuracy.textContent = "Accuracy: 100%";
-        typingWpm.textContent = "WPM: 0";
+    }
 
+});
+
+resetTyping.addEventListener("click", () => {
+
+    clearInterval(typingTimer);
+
+    typingTimer = null;
+    typingStart = null;
+
+    typingInput.value = "";
+    typingInput.disabled = false;
+
+    typingTime.textContent = "Time: 0s";
+    typingAccuracy.textContent = "Accuracy: 100%";
+    typingWpm.textContent = "WPM: 0";
+
+});
+
+
+// BACK TO TOP
+
+const backToTop = document.getElementById("backToTop");
+
+window.addEventListener("scroll", () => {
+
+    backToTop.classList.toggle(
+        "visible",
+        window.scrollY > 400
+    );
+
+}, { passive: true });
+
+backToTop.addEventListener("click", () => {
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
     });
 
-}
+});
 
-
-// ==================================
-// 7. SCROLL ANIMATIONS
-// ==================================
-
-const revealElements = document.querySelectorAll(".reveal");
-
-if ("IntersectionObserver" in window) {
-
-    const observer = new IntersectionObserver(function (entries) {
-
-        entries.forEach(function (entry) {
-
-            if (entry.isIntersecting) {
-
-                entry.target.classList.add("visible");
-
-                observer.unobserve(entry.target);
-
-            }
-
-        });
-
-    }, {
-       
+console.log("ROSHAN GLOBAL TECH - Website Ready");
