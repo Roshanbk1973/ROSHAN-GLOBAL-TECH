@@ -738,3 +738,55 @@ main {
     }
 
 }
+/* PROJECT SHOWCASE */
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    border-color: #38bdf8;
+    box-shadow: 0 15px 40px rgba(37,99,235,0.2);
+}
+
+.project-card .card-icon {
+    font-size: 45px;
+}
+
+.project-card h3 {
+    color: var(--text);
+}
+
+.project-card p {
+    flex-grow: 1;
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.project-tags span {
+    background: rgba(37,99,235,0.15);
+    color: #38bdf8;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.project-card .button {
+    text-align: center;
+}
+
+@media (max-width:650px) {
+    .project-card {
+        padding: 25px;
+    }
+}
